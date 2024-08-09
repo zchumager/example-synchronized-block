@@ -22,13 +22,21 @@ public class Costumer implements Runnable {
 				try {
 					System.out.println("The product list is empty so wait "+Thread.currentThread().getName());
 					products.wait();
-					//Todo código debajo de wait no se ejecuta hasta que el objeto en espera es notificado
+					/*
+					* Note:
+					* All code below wait method execution will not be executed
+					* until the same instance executes the notify method
+					* */
 				} catch (InterruptedException e) {
 					e.fillInStackTrace();
 				}
 			}
 			
-			//código que se ejecuta después de que el objeto en espera es notificado
+			/*
+			* Note:
+			* This code is being executed when notify is being executed.
+			* In this case products.notify() is being called by an instance of Producer class
+			* */
 			Product product = this.products.get(0);
 			this.products.remove(0);
 			System.out.println(product+" has been gotten by "+Thread.currentThread().getName());
@@ -39,19 +47,3 @@ public class Costumer implements Runnable {
 		this.consume();
 	}
 }
-
-
-/*
- * para poder suspender un thread es necesario elegir un objeto monitor que conecte al suspendido y al despertador
- * en este caso ese objeto monitor es la lista de productos.
- * 
- * El objeto que actua como monitor debe de sincronizarse en el oyente y el despertador, 
- * el bloque synchronize es como un tunel de comunicacion entre el objeto oyente y el objeto despertador
- * 
- * Logica, el codigo primero va el wait y abajo de este va el codigo que se ejecutaria normalmente
- * 
- * El codigo lo que esta debajo de wait no se ejecuta
- * 
- * El notify ejecuta lo que esta debajo del wait
- * 
- */
