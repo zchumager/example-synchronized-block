@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Costumer implements Runnable {
 	
-	private ArrayList<Product> products;
+	private final ArrayList<Product> products;
 	
 	public Costumer(ArrayList<Product> products) {
 		this.products = products;
@@ -13,8 +13,8 @@ public class Costumer implements Runnable {
 	public void consume(){
 		try {
 			Thread.sleep(1000);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
+		} catch (InterruptedException e) {
+			e.fillInStackTrace();
 		}
 		
 		synchronized(this.products) {
@@ -24,7 +24,7 @@ public class Costumer implements Runnable {
 					products.wait();
 					//Todo código debajo de wait no se ejecuta hasta que el objeto en espera es notificado
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					e.fillInStackTrace();
 				}
 			}
 			
@@ -50,7 +50,7 @@ public class Costumer implements Runnable {
  * 
  * Logica, el codigo primero va el wait y abajo de este va el codigo que se ejecutaria normalmente
  * 
- * Todo lo que esta debajo de wait no se ejecuta
+ * El codigo lo que esta debajo de wait no se ejecuta
  * 
  * El notify ejecuta lo que esta debajo del wait
  * 

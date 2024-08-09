@@ -5,22 +5,25 @@ import java.util.Random;
 
 public class Producer implements Runnable {
 	
-	private ArrayList<Product> products = new ArrayList<Product>();
-	
+	private final ArrayList<Product> products;
+	private final long timeout = 18000;
+
 	public Producer(ArrayList<Product> products) {
 		this.products = products;
 	}
 	
 	public void produce() {
-		while(!Thread.currentThread().isInterrupted()) {
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			synchronized(this.products) {
-				Product product = new Product("Product "+ (new Random().nextInt(50)+1));
+		long stopTime = System.currentTimeMillis() + this.timeout;
+
+		while(System.currentTimeMillis() < stopTime) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.fillInStackTrace();
+            }
+
+            synchronized(this.products) {
+				Product product = new Product("Product "+ (new Random().nextInt(1500)+1));
 				System.out.println(product+" has been added");
 				this.products.add(product);
 				this.products.notify();
